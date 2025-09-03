@@ -2,7 +2,6 @@ import { TEAMS } from "../api/teams/route";
 import { GamecastField } from "./gamecastField";
 import { findMatchingTeam } from "../utils/findMatchingTeam";
 import { Game } from "./scoreBug";
-import { get } from "http";
 
 function getPlayType(lastPlay?: string | null): string {
   if (!lastPlay) return "Unknown Play";
