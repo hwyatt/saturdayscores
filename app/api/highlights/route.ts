@@ -51,6 +51,7 @@ export async function GET(request: Request) {
 
       return NextResponse.json(hdLinks, { status: 200 });
     } catch (err) {
+      console.error("Failed to fetch ESPN data:", err);
       return NextResponse.json([], { status: 200 });
     }
   } catch (err) {
