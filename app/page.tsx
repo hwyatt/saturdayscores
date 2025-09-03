@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { Suspense, useEffect, useState, useRef } from "react";
 import { Game, ScoreBug } from "./components/scoreBug";
 import { TEAMS } from "./api/teams/route";
 import { ScrollingMarquee } from "./components/scrollingMarquee";
@@ -7,6 +7,14 @@ import { Gamecast } from "./components/gamecast";
 import { useSearchParams } from "next/navigation";
 
 export default function Home() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Inner />
+    </Suspense>
+  );
+}
+
+function Inner() {
   const [games, setGames] = useState<Game[]>([]);
   const [fade, setFade] = useState(false);
   const [visibleSetIndex, setVisibleSetIndex] = useState(0);
