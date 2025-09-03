@@ -64,13 +64,13 @@ export const Gamecast = ({ game }: GamecastProps) => {
           school: matchingHomeTeam?.school || "",
           color: matchingHomeTeam?.color || "",
           abbr: matchingHomeTeam?.abbreviation || "",
-          logo: matchingHomeTeam?.logos[0] || "",
+          logo: (matchingHomeTeam?.logos ?? [])[0] || "",
         }}
         awayTeam={{
           school: matchingAwayTeam?.school || "",
           color: matchingAwayTeam?.color || "",
           abbr: matchingAwayTeam?.abbreviation || "",
-          logo: matchingAwayTeam?.logos[0] || "",
+          logo: (matchingAwayTeam?.logos ?? [])[0] || "",
         }}
         lastPlay={lastPlay}
         currentSituation={currentSituation}
