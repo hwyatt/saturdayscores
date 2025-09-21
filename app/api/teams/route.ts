@@ -2128,7 +2128,7 @@ export const TEAMS = [
     id: 2390,
     school: "Miami",
     mascot: "Hurricanes",
-    abbreviation: "MIAMI",
+    abbreviation: "MIA",
     alt_name1: "Miami (FL)",
     alt_name2: "MIAMI",
     alt_name3: "Miami",
