@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useEffect, useState, useRef } from "react";
+import { Suspense, useEffect, useState, useRef, useMemo } from "react";
 import { Game, ScoreBug } from "./components/scoreBug";
 import { TEAMS } from "./api/teams/route";
 import { ScrollingMarquee } from "./components/scrollingMarquee";
@@ -24,10 +24,12 @@ function Inner() {
   const gamesRef = useRef<Game[]>([]);
   const [featuredGameIds, setFeaturedGameIds] = useState<string[]>([]);
   const searchParams = useSearchParams();
-  const featuredGamesInProgress = games.filter(
-    (g) =>
-      featuredGameIds.includes(g.id.toString()) && g.status === "in_progress"
-  );
+  const featuredGamesInProgress = useMemo(() => {
+    return games.filter(
+      (g) =>
+        featuredGameIds.includes(g.id.toString()) && g.status === "in_progress"
+    );
+  }, [games, featuredGameIds]);
   const currentFeatured = featuredGamesInProgress[featuredIndex] || null;
   const canFadeFeatured = featuredGamesInProgress.length > 1;
 
@@ -106,28 +108,29 @@ function Inner() {
   }, []);
 
   useEffect(() => {
-    if (featuredGamesInProgress.length <= 1) return; // skip cycling
+    if (featuredGamesInProgress.length <= 1) return;
 
     const cycleFeatured = setInterval(() => {
       setFeaturedFade(true);
 
       setTimeout(() => {
         setFeaturedIndex((prev) => {
-          const featuredGames = gamesRef.current.filter(
-            (g) =>
-              featuredGameIds.includes(g.id.toString()) &&
-              g.status === "in_progress"
-          );
-
-          if (featuredGames.length === 0) return prev;
-          return (prev + 1) % featuredGames.length;
+          // If list has changed in size, reset index
+          const nextIndex = (prev + 1) % featuredGamesInProgress.length;
+          return nextIndex;
         });
         setFeaturedFade(false);
       }, 500);
     }, 33000);
 
     return () => clearInterval(cycleFeatured);
-  }, [featuredGameIds, featuredGamesInProgress.length]);
+  }, [featuredGamesInProgress.length]);
+
+  useEffect(() => {
+    if (featuredIndex >= featuredGamesInProgress.length) {
+      setFeaturedIndex(0);
+    }
+  }, [featuredGamesInProgress.length]);
 
   const startIndex = visibleSetIndex * GAMES_PER_SET;
   const currentGames = games.slice(startIndex, startIndex + GAMES_PER_SET);
